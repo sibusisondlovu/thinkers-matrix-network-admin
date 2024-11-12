@@ -6,18 +6,19 @@
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><i data-feather="user"></i></div>
-                            Users List
+                            All Members
                         </h1>
                     </div>
                     <div class="col-12 col-xl-auto mb-3">
-                        <a class="btn btn-sm btn-light text-primary" href="user-management-groups-list.html">
+                        <button class="btn btn-sm btn-light text-primary" href="user-management-groups-list.html">
                             <i class="me-1" data-feather="users"></i>
                             Manage Groups
-                        </a>
-                        <a class="btn btn-sm btn-light text-primary" href="user-management-add-user.html">
+                        </button>
+                        <button class="btn btn-sm btn-light text-primary" @click="navigateToAddUser">
                             <i class="me-1" data-feather="user-plus"></i>
-                            Add New User
-                        </a>
+                            Add New Member
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -30,11 +31,11 @@
                 <table id="members" class="table table-sm table-hover">
                     <thead>
                         <tr>
-                            <th>User</th>
-                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Username</th>
                             <th>Role</th>
-                            <th>Groups</th>
-                            <th>Joined Date</th>
+                            <th>Leader</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -42,24 +43,18 @@
                         <tr v-for="member in members" :key="member.id">
                             <td>
                                 <div class="d-flex align-items-center">
-                                    {{ member.name }}
+                                    {{ member.firstName }}
                                 </div>
                             </td>
-                            <td>{{ member.email }}</td>
-                            <td>{{ member.role }}</td>
+                            <td>{{ member.lastName }}</td>
+                            <td>{{ member.username }}</td>
                             <td>
-                                <span v-for="group in member.groups" :key="group" :class="groupBadgeClass(group)">
-                                    {{ group }}
-                                </span>
+                                {{ member.type }}
                             </td>
-                            <td>{{ formatDate(member.joinedDate) }}</td>
+                            <td>{{ member.leaderId }}</td>
                             <td>
-                                <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="user-management-edit-user.html">
-                                    <i data-feather="edit"></i>
-                                </a>
-                                <a class="btn btn-datatable btn-icon btn-transparent-dark" href="#!" @click="deleteMember(member.id)">
-                                    <i data-feather="trash-2"></i>
-                                </a>
+                                <a class="btn btn-primary btn-sm" @click="viewApprentices(member.leaderId)">View
+                                    Apprentices</a>
                             </td>
                         </tr>
                     </tbody>
@@ -81,6 +76,14 @@ export default {
         };
     },
     methods: {
+        navigateToAddUser() {
+            this.$router.push({ name: 'AddUser' });
+        },
+
+        viewApprentices(leaderId) {
+        this.$router.push({ name: 'LeaderApprentices', params: { leaderId } });
+    },
+
         async fetchMembers() {
             try {
                 const querySnapshot = await getDocs(collection(db, 'members'));

@@ -43,19 +43,20 @@
             <div class="nav accordion" id="accordionSidenav">
 
               <div class="sidenav-menu-heading">MENU</div>
-
-              <a class="nav-link" href="charts.html">
+              <router-link class="nav-link" :to="{ name: 'Workspace' }">
                 <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
                 Workspace
-              </a>
-              <a class="nav-link" href="tables.html">
+              </router-link>
+
+              <router-link class="nav-link" :to="{ name: 'Members' }">
                 <div class="nav-link-icon"><i data-feather="filter"></i></div>
                 Members
-              </a>
-              <a class="nav-link" href="tables.html">
+              </router-link>
+
+              <!-- <router-link class="nav-link" :to="{ name: 'Tasks' }">
                 <div class="nav-link-icon"><i data-feather="filter"></i></div>
                 Tasks
-              </a>
+              </router-link> -->
             </div>
           </div>
           <!-- Sidenav Footer-->

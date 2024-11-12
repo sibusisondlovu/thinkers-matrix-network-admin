@@ -1,17 +1,18 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import { auth } from '../firebaseConfig';
-import Dashboard from '../views/Workspace.vue';
 import Login from '../views/Login.vue';
 import AddUser from '@/views/AddUser.vue';
 import Members from '@/views/Members.vue';
+import Workspace from '../views/Workspace.vue';
+import LeaderApprentices from '@/views/LeaderApprentices.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'Dashboard',
-    component: Dashboard,
-    meta: { requiresAuth: true },
+    name: 'Workspace',
+    component: Workspace,
+    meta: { requiresAuth: false },
   },
   {
     path: '/login',
@@ -22,14 +23,25 @@ const routes = [
     path: '/add-user',
     name: 'AddUser',
     component: AddUser,
+    meta: { requiresAuth: false }
   },
   {
     path: '/members',
     name: 'Members',
     component: Members,
+    meta: { requiresAuth: false }
   },
-  // Optional: Redirect all unmatched routes to Dashboard
-  { path: '/:catchAll(.*)', redirect: '/' },
+  {
+    path: '/members/:leaderId',
+    name: 'LeaderApprentices',
+    component: LeaderApprentices,
+    props: true, 
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/:catchAll(.*)', 
+    redirect: '/' 
+  },
 ];
 
 const router = createRouter({

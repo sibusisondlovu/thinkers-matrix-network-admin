@@ -10,10 +10,10 @@
                         </h1>
                     </div>
                     <div class="col-12 col-xl-auto mb-3">
-                        <a class="btn btn-sm btn-light text-primary" href="user-management-list.html">
-                            <i class="me-1" data-feather="arrow-left"></i>
+                        <button class="btn btn-sm btn-light text-primary" @click="navigateToAllUsers">
+            
                             Back to Users List
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -111,6 +111,9 @@ export default {
         };
     },
     methods: {
+        navigateToAllUsers() {
+            this.$router.push({ name: 'Members' });
+        },
         generateUsername() {
             const randomNumber = Math.floor(100000 + Math.random() * 900000);
             return `TNM${randomNumber}`;
@@ -139,19 +142,18 @@ export default {
                 const response = await axios.post('http://localhost:3000/create-user', data);
 
                 if (response.status === 201) {
-                    alert('User created successfully!');
+                    alert('User created successfully!' + response.data);
 
                     const userData = {
                         firstName: this.user.firstName,
                         lastName: this.user.lastName,
                         contactNumber: this.user.contactNumber,
-                        email: this.user.email,
-                        password: this.user.password,
-                        displayName: `${this.user.firstName} ${this.user.lastName}`,
+                        password: data.password,
+                        username: data.username,
                         role: this.selectedRole, // Assuming you want to store the role too
                     };
-
-                    const uid = 'response.data.uid'; // Assuming the API returns the uid of the user
+               
+                    const uid = response.data.message; // Assuming the API returns the uid of the user
                     const userRef = doc(db, 'members', uid); // Firestore document reference
                     await setDoc(userRef, userData);
 
