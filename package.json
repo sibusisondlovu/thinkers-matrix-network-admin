@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,7 +13,8 @@
     "firebase": "^11.0.1",
     "firebase-admin": "^12.7.0",
     "vue": "^3.5.12",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vue-toasty": "^0.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",

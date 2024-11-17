@@ -26,6 +26,8 @@
                                 <h5>Leaders</h5>
                                 <div class="text-muted small">0</div>
                             </div>
+                            <router-link class="btn btn-primary btn-sm" :to="{ name: 'Members' }">Manage
+                                Leaders</router-link>
 
                         </div>
                     </div>
