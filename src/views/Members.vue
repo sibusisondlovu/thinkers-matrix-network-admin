@@ -1,119 +1,107 @@
 <template>
-    <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-        <div class="container-fluid px-4">
-            <div class="page-header-content">
-                <div class="row align-items-center justify-content-between pt-3">
-                    <div class="col-auto mb-3">
-                        <h1 class="page-header-title">
-                            <div class="page-header-icon"><i data-feather="user"></i></div>
-                            All Members
-                        </h1>
-                    </div>
-                    <div class="col-12 col-xl-auto mb-3">
-                        <button class="btn btn-primary btn-sm" @click="openModal">
-                            Add Member
-                        </button>
+    <div class="container mt-4">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fw-bold">Thinkers Network Members</h2>
+            <button class="btn btn-sm btn-primary" @click="showAddMemberModal">
+                <i class="bi bi-person-plus me-1"></i> Add Member
+            </button>
+        </div>
 
+        <!-- Cards Section -->
+        <div class="row g-3">
+            <div class="col-12 col-md-4 col-lg-3" v-for="member in members" :key="member.id">
+                <div class="card shadow-sm text-center h-100">
+                    <img :src="member.avatar" alt="Avatar" class="card-img-top"
+                        style="height: 150px; object-fit: cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ member.name }} {{ member.surname }}</h5>
+                        <p class="card-text text-muted">
+                            {{ member.homecell }} - {{ member.role }}
+                        </p>
+                        <div>
+                            <button class="btn btn-outline-primary btn-sm me-2">
+                                <i class="bi bi-diagram-3"></i> View Matrix
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-person-circle"></i> Manage Profile
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
-    <!-- Main page content-->
-    <div class="container-fluid px-4">
-        <div class="card">
-            <div class="card-body">
-                <table id="members" class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th class="hide-mobile">Username</th>
-                            <th class="hide-mobile">Role</th>
-                            <th class="hide-mobile">Leader</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- <tr v-for="member in members" :key="member.id">
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    {{ member.firstName }}
+
+        <!-- Add Member Modal -->
+        <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addMemberModalLabel">Add New Member</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- Modal Body: Adjusted Form Layout with Small Text Boxes -->
+                    <div class="modal-body">
+                        <form @submit.prevent="addMember">
+                            <!-- Name and Surname on the Same Line -->
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control form-control-sm" v-model="newMember.name"
+                                        required />
                                 </div>
-                            </td>
-                            <td>{{ member.lastName }}</td>
-                            <td class="hide-mobile">{{ member.username }}</td>
-                            <td class="hide-mobile">
-                                {{ member.type }}
-                            </td>
-                            <td class="hide-mobile">{{ member.leaderId }}</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" @click="viewApprentices(member.leaderId)">View
-                                    Apprentices</a>
-                            </td>
-                        </tr> -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="addMemberModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Member</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Add Member Form -->
-                    <form @submit.prevent="addMember">
-                        <div class="row mb-3">
-                            <!-- Full Name -->
-                            <div class="col-md-6">
-                                <label for="fullName" class="form-label">Full Name</label>
-                                <input v-model="member.fullName" type="text" class="form-control" id="fullName"
-                                    placeholder="Enter full name" required />
+                                <div class="col-md-6">
+                                    <label class="form-label">Surname</label>
+                                    <input type="text" class="form-control form-control-sm" v-model="newMember.surname"
+                                        required />
+                                </div>
                             </div>
 
-                            <!-- Mobile Number -->
-                            <div class="col-md-6">
-                                <label for="mobileNumber" class="form-label">Mobile Number</label>
-                                <input v-model="member.mobileNumber" type="text" class="form-control" id="mobileNumber"
-                                    placeholder="Enter mobile number" required />
+                            <!-- Homecell and Role on the Same Line -->
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Homecell</label>
+                                    <select class="form-select form-select-sm" v-model="newMember.homecell" required>
+                                        <option disabled value="">Select Homecell</option>
+                                        <option>Homecell 1</option>
+                                        <option>Homecell 2</option>
+                                        <option>Homecell 3</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Role</label>
+                                    <select class="form-select form-select-sm" v-model="newMember.role" required>
+                                        <option disabled value="">Select Role</option>
+                                        <option>Leader</option>
+                                        <option>Apprentice</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <!-- Role -->
-                            <label for="role" class="form-label">Role</label>
-                            <select v-model="member.role" id="role" class="form-select" required>
-                                <option value="leader">Leader</option>
-                                <option value="apprentice">Apprentice</option>
-                            </select>
-                        </div>
+                            <!-- Contact Number and Email on the Same Line -->
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Contact Number</label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        v-model="newMember.contactNumber" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control form-control-sm"
+                                        v-model="newMember.emailAddress" required />
+                                </div>
+                            </div>
 
-                        <div v-if="member.role === 'apprentice'" class="mb-3">
-                            <!-- Select Leader -->
-                            <label for="leader" class="form-label">Select Leader</label>
-                            <select v-model="member.leaderId" id="leader" class="form-select">
-                                <option v-for="leader in leaders" :key="leader.id" :value="leader.id">
-                                    {{ leader.fullName }}
-                                </option>
-                            </select>
-                        </div>
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <span v-if="isSubmitting" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                                <span v-else>Add Member</span>
+                            </button>
+                        </form>
+                    </div>
 
-                        <!-- Spinner -->
-                        <div v-if="loading" class="text-center my-3">
-                            <div class="spinner-border" role="status"></div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary" :disabled="loading">
-                            Add Member
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -121,95 +109,82 @@
 </template>
 
 <script>
-import { db } from '@/firebaseConfig';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig"; // Ensure this is your Firebase config path
+
 
 export default {
-    name: 'AddMemberModal',
+    name: "Members",
     data() {
         return {
-            loading: false,
-            member: {
-                fullName: '',
-                mobileNumber: '',
-                role: 'leader',
-                leaderId: null,
+            members: [], // Members list
+            newMember: {
+                name: "",
+                surname: "",
+                homecell: "",
+                contactNumber: "",
+                emailAddress: "",
+                role: "",
+                avatar: "https://via.placeholder.com/150", // Default Avatar URL
                 points: 0,
+                username: "",
             },
-            leaders: [],
+            isSubmitting: false, // Show progress spinner
         };
     },
     methods: {
-        async fetchLeaders() {
-            // Fetch leaders from Firestore
-            const querySnapshot = await getDocs(
-                query(collection(db, 'members'), where('role', '==', 'leader'))
-            );
-            this.leaders = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        },
-        openModal() {
-            const modal = new bootstrap.Modal(document.getElementById('addMemberModal'));
+        showAddMemberModal() {
+            const modal = new bootstrap.Modal(document.getElementById("addMemberModal"));
             modal.show();
         },
+        generateUsername(surname) {
+            const prefix = surname.substring(0, 4).toUpperCase();
+            const randomNum = Math.floor(100 + Math.random() * 900); // Random 3-digit number
+            return `${prefix}${randomNum}`;
+        },
         async addMember() {
-            this.loading = true;
-
             try {
-                const docRef = doc(collection(db, 'members'), this.member.fullName); // Unique ID (or generate UUID)
-                await setDoc(docRef, {
-                    ...this.member,
-                    createdAt: new Date().toISOString(),
-                });
+                this.isSubmitting = true;
 
-                this.$toasty.success('Member added successfully!');
+                // Generate the username
+                this.newMember.username = this.generateUsername(this.newMember.surname);
+
+                // Save the member to Firestore
+                const docRef = await addDoc(collection(db, "members"), this.newMember);
+
+                // Add to local list
+                this.members.push({ ...this.newMember, id: docRef.id });
+
+                // Show success message
+                this.$toasty.success("Member added successfully!");
+
+                // Close modal and reset form
+                const modal = bootstrap.Modal.getInstance(document.getElementById("addMemberModal"));
+                modal.hide();
                 this.resetForm();
             } catch (error) {
-                console.error('Error adding member:', error);
-                this.$toasty.error('Failed to add member. Please try again.');
+                console.error("Error adding member: ", error);
+                this.$toasty.error("Failed to add member. Please try again.");
             } finally {
-                this.loading = false;
-                const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
-                modal.hide();
+                this.isSubmitting = false;
             }
         },
         resetForm() {
-            this.member = {
-                fullName: '',
-                mobileNumber: '',
-                role: 'leader',
-                leaderId: null,
+            this.newMember = {
+                name: "",
+                surname: "",
+                homecell: "",
+                contactNumber: "",
+                emailAddress: "",
+                role: "",
+                avatar: "https://via.placeholder.com/150", // Reset Avatar URL
                 points: 0,
+                username: "",
             };
         },
     },
-    mounted() {
-        this.fetchLeaders();
+    created() {
+        // Fetch members from Firestore here if needed
     },
 };
 </script>
-
-
-<style>
-.custom-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1rem 0;
-}
-
-.custom-table th,
-.custom-table td {
-    padding: 0.5rem;
-    border: 1px solid #dee2e6;
-}
-
-.custom-table tbody tr:hover {
-    background-color: rgba(0, 0, 0, .075);
-}
-
-/* Hide specific columns on mobile */
-@media screen and (max-width: 768px) {
-    .custom-table .hide-mobile {
-        display: none;
-    }
-}
-</style>

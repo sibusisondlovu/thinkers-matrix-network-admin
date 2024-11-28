@@ -1,90 +1,105 @@
 <template>
   <div id="app">
-    <nav
-      class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
-      id="sidenavAccordion">
-      <!-- Sidenav Toggle Button-->
-      <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i
-          data-feather="menu"></i></button>
-      <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="index.html">Thinkers Matrix Network</a>
+    <!-- Navigation Bar -->
+    <nav v-if="$route.name !== 'login'" class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="#">Thinkers Network Matrix</a>
 
-      <!-- Navbar Items-->
-      <ul class="navbar-nav align-items-center ms-auto">
-        <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
-          <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
-            href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false"><img class="img-fluid" src="" alt="Photo" /></a>
-          <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
-            aria-labelledby="navbarDropdownUserImage">
-            <h6 class="dropdown-header d-flex align-items-center">
-              <img class="dropdown-user-img" src="" />
-              <div class="dropdown-user-details">
-                <div class="dropdown-user-details-name">Vusi Mahlangu</div>
-                <div class="dropdown-user-details-email">vmahlangu@thinkersnetwork.co.za</div>
-              </div>
-            </h6>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#!">
-              <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
-              Account
-            </a>
-            <a class="dropdown-item" href="#!">
-              <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
-              Logout
-            </a>
-          </div>
-        </li>
-      </ul>
+        <!-- Centered menu items -->
+        <div class="collapse navbar-collapse justify-content-center">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <router-link class="nav-link d-flex align-items-center" to="/dashboard">
+                <i class="fas fa-file-alt me-2"></i> Members
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link d-flex align-items-center" to="/calls-log">
+                <i class="fas fa-file-alt me-2"></i> Tasks
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link d-flex align-items-center" to="/paramedics">
+                <i class="fas fa-user-md me-2"></i> Reports
+              </router-link>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Login/Logout Button -->
+        <div class="d-flex">
+          <button class="btn btn-outline-light" @click="toggleAuth">{{ authText }}</button>
+        </div>
+      </div>
     </nav>
-    <div id="layoutSidenav">
-      <div id="layoutSidenav_nav">
-        <nav class="sidenav shadow-right sidenav-light">
-          <div class="sidenav-menu">
-            <div class="nav accordion" id="accordionSidenav">
 
-              <div class="sidenav-menu-heading">MENU</div>
-              <router-link class="nav-link" :to="{ name: 'Workspace' }">
-                <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
-                Workspace
-              </router-link>
+    <!-- Main Content -->
+    <main class="container py-5">
+      <!-- Vue Router Outlet -->
+      <router-view />
+    </main>
 
-              <router-link class="nav-link" :to="{ name: 'Members' }">
-                <div class="nav-link-icon"><i data-feather="filter"></i></div>
-                Members
-              </router-link>
-
-              <!-- <router-link class="nav-link" :to="{ name: 'Tasks' }">
-                <div class="nav-link-icon"><i data-feather="filter"></i></div>
-                Tasks
-              </router-link> -->
-            </div>
-          </div>
-          <!-- Sidenav Footer-->
-          <div class="sidenav-footer">
-            <div class="sidenav-footer-content">
-              <div class="sidenav-footer-subtitle">Logged in as:</div>
-              <div class="sidenav-footer-title">Vusi Mahlangu</div>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div id="layoutSidenav_content">
-        <main>
-          <router-view></router-view>
-        </main>
-        <footer class="footer-admin mt-auto footer-light">
-          <div class="container-xl px-4">
-            <div class="row">
-              <div class="col-md-6 small">Copyright &copy; Your Website 2021</div>
-              <div class="col-md-6 text-md-end small">
-                <a href="#!">Privacy Policy</a>
-                &middot;
-                <a href="#!">Terms &amp; Conditions</a>
-              </div>
-            </div>
-          </div>
-        </footer>
-      </div>
-    </div>
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3">
+      <p class="mb-0">
+        &copy; 2024 Humble Departure Funerals (Pty) Ltd | Powered by Jaspa Digital
+      </p>
+    </footer>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      isAuthenticated: false, // Track login state
+    };
+  },
+  computed: {
+    authText() {
+      return this.isAuthenticated ? "Logout" : "Login";
+    },
+  },
+  methods: {
+    toggleAuth() {
+      if (this.isAuthenticated) {
+        // Perform logout logic
+        this.isAuthenticated = false;
+      } else {
+        // Redirect to login page if not logged in
+        this.$router.push("/login");
+      }
+    },
+  },
+  watch: {
+    $route(to, from) {
+      // If route changes to 'login', hide navbar
+      this.isAuthenticated = false;
+      if (to.name === "login") {
+        this.isAuthenticated = false;
+      }
+    },
+  },
+};
+</script>
+
+<style>
+/* Center the menu items in the navbar */
+.navbar-nav {
+  flex-direction: row;
+  gap: 20px;
+}
+
+/* Font styles */
+.navbar-nav .nav-link {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+/* Footer styles */
+footer {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+</style>
