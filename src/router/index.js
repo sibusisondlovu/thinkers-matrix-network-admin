@@ -9,6 +9,12 @@ import LeaderApprentices from "@/views/LeaderApprentices.vue";
 const routes = [
   {
     path: "/",
+    name: "Login",
+    component: Login,
+    meta: { requiresAuth: false },
+  },
+  {
+    path: "/workspace",
     name: "Workspace",
     component: Workspace,
     meta: { requiresAuth: false },

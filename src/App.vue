@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Navigation Bar -->
-    <nav v-if="$route.name !== 'login'" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav v-if="$route.name !== 'Login'" class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <!-- Navbar brand -->
         <a class="navbar-brand" href="#">Thinkers Network Matrix</a>
@@ -41,9 +41,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-light text-center py-3">
+    <footer class="bg-light text-center py-1">
       <p class="mb-0">
-        &copy; 2024 Humble Departure Funerals (Pty) Ltd | Powered by Jaspa Digital
+        &copy; 2025 Thinkers Academy (Pty) Ltd | Powered by <a href="https://wwww.jaspa.co.za">Jaspa</a> | Vesion: 1.0.0-alpha
       </p>
     </footer>
   </div>

@@ -20,11 +20,11 @@
                             {{ member.homecell }} - {{ member.role }}
                         </p>
                         <div>
-                            <button class="btn btn-outline-primary btn-sm me-2">
-                                <i class="bi bi-diagram-3"></i> View Matrix
+                            <button class="btn btn-outline-primary btn-sm me-2" v-if="member.role !== 'Apprentice'">
+                                <i class="bi bi-diagram-3"></i> Matrix
                             </button>
                             <button class="btn btn-outline-secondary btn-sm">
-                                <i class="bi bi-person-circle"></i> Manage Profile
+                                <i class="bi bi-person-circle"></i> Profile
                             </button>
                         </div>
                     </div>
@@ -109,12 +109,21 @@
 </template>
 
 <script>
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/firebaseConfig"; // Ensure this is your Firebase config path
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
 
 
 export default {
     name: "Members",
+    async mounted() {
+        try {
+            const membersSnapshot = await getDocs(collection(db, "members"));
+            this.members = membersSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        } catch (error) {
+            console.error("Error fetching members:", error);
+            // Handle error (e.g., display error message to user using toast or another method)
+        }
+    },
     data() {
         return {
             members: [], // Members list
@@ -125,7 +134,7 @@ export default {
                 contactNumber: "",
                 emailAddress: "",
                 role: "",
-                avatar: "https://via.placeholder.com/150", // Default Avatar URL
+                avatar: "https://via.placeholder.com/150",
                 points: 0,
                 username: "",
             },
@@ -184,7 +193,7 @@ export default {
         },
     },
     created() {
-        // Fetch members from Firestore here if needed
+        // this.fetchMembers();
     },
 };
 </script>

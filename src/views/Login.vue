@@ -7,18 +7,18 @@
               <div class="col-lg-5">
                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                   <div class="card-header justify-content-center">
-                    <h3 class="fw-light my-4">Login</h3>
+                    <h3 class="fw-light my-4  text-center ">Thinkers Network Matrix Login</h3>
                   </div>
                   <div class="card-body">
                     <form @submit.prevent="handleLogin">
                       <div class="mb-3">
-                        <label class="small mb-1" for="inputEmailAddress">Email</label>
+                        <label class="small mb-1" for="inputUsername">Username</label>
                         <input
                           class="form-control"
-                          id="inputEmailAddress"
-                          type="email"
-                          placeholder="Enter email address"
-                          v-model="email"
+                          id="inputUsername"
+                          type="text"
+                          placeholder="Username"
+                          v-model="username"
                           required
                         />
                       </div>
@@ -70,7 +70,7 @@
     name: 'Login',
     data() {
       return {
-        email: '',
+        username: '',
         password: '',
         isLoading: false,
         errorMessage: '',
@@ -83,7 +83,7 @@
   
         try {
           const auth = getAuth(); // Get Firebase auth instance
-          await signInWithEmailAndPassword(auth, this.email, this.password);
+          await signInWithEmailAndPassword(auth, this.username + '@thinkersrulers.co.za', this.password);
           this.$router.push('/workspace'); // Redirect to workspace on success
           this.$bvToast.toast('Successfully logged in!', { // Display success toast
             title: 'Login Success',
@@ -111,7 +111,7 @@
   
   <style scoped>
   .login {
-    max-width: 400px;
+    width: 250;
     margin: auto;
   }
   </style>
